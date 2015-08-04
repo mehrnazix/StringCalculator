@@ -35,5 +35,17 @@ public class StringCalculatorTest {
 		Assert.assertEquals(11, result);
 	}
 
+	//because of trowing exception this test did not work
+	@Test
+	public void negativeNumbersNotAllow() {
+		int result = stringCalculator.add("-5,2");
+		Assert.assertEquals(2, result);
+	}
+	
+//	@Test 
+//	public void patternChangesDelimiter() {
+//		int result = stringCalculator.add("//;\n1;2");
+//		Assert.assertEquals(3, result);
+//	}
 	
 }

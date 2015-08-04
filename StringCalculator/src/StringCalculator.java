@@ -1,25 +1,39 @@
 import java.io.IOException;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.SwingUtilities;
 
 public class StringCalculator {
 	public int sum;
-	public char delimiter;
+	public String delimiter;
 
 
 	public static void main(String[] args) {
 		StringCalculator stringCalc = new StringCalculator();
-		System.out.println(stringCalc.add("-4,2"));
+		System.out.println(stringCalc.add("//;\n2;5"));
 	}
 	
 	public int add(String string) {
 		
-		String numbers[] = string.split(",|\n");
+		String negatives = "";
+		int number = 0;
 		
-		int negativeNums[] = null; 
+		Pattern p = Pattern.compile("^/{2}[;,:?]+\\n+.+");
+		Matcher matcher = p.matcher(string);
 		
+		String numbers[] = null;
+		
+		if (matcher.find()) {
+			delimiter = "" + string.charAt(2);
+			numbers = string.split(delimiter);
+		} else {
+			numbers = string.split(",|\n");
+			
+		}
+				
 		for (int i = 0; i < numbers.length; i++) {
-			int number = 0;
 			try {
 				number = Integer.parseInt(numbers[i]);
 			} catch (Exception e) {
@@ -29,14 +43,14 @@ public class StringCalculator {
 				sum += number;
 			}
 			if (number < 0) {
-				negativeNums[i]= number;
-				throw new IllegalArgumentException("negatives not allowed");
+				negatives += " " + number;
 			}
 		}
-		
-		if (negativeNums.length > 1) {
-			throw new IllegalArgumentException("negatives not allowed");
+		if (negatives.length() > 1) {
+			
+			throw new IllegalArgumentException("negatives not allowed" + negatives);
 		}
+		
 		return sum;
 	}
 }
