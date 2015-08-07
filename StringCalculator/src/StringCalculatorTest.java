@@ -59,6 +59,12 @@ public class StringCalculatorTest {
 	}
 	
 	@Test
+	public void delimiterSholudbeAnyLength() {
+		int result = stringCalculator.add("//[***]\n1*2%3");
+		Assert.assertEquals("[***]", stringCalculator.delimiter);
+	}
+	
+	@Test
 	public void patternWithSeveralDelimiterShouldBeSupported() {
 		int result = stringCalculator.add("//[***][%]\n1*2%3");
 		Assert.assertEquals("[***][%]", stringCalculator.delimiter);
