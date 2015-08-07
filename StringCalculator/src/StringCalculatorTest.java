@@ -1,6 +1,8 @@
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class StringCalculatorTest {
 	
@@ -35,17 +37,36 @@ public class StringCalculatorTest {
 		Assert.assertEquals(11, result);
 	}
 
-	//because of trowing exception this test did not work
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+	
 	@Test
 	public void negativeNumbersNotAllow() {
-		int result = stringCalculator.add("-5,2");
-		Assert.assertEquals(2, result);
+		exception.expect(IllegalArgumentException.class);
+		stringCalculator.add("-5,2");
 	}
 	
-//	@Test 
-//	public void patternChangesDelimiter() {
-//		int result = stringCalculator.add("//;\n1;2");
-//		Assert.assertEquals(3, result);
-//	}
+	@Test 
+	public void patternChangesDelimiter() {
+		int result = stringCalculator.add("//;\n1;2");
+		Assert.assertEquals(";", stringCalculator.delimiter);
+	}
 	
+	@Test
+	public void numbersBiggerThan1000ShouldBeIgnored() {
+		int result = stringCalculator.add("1002,5");
+		Assert.assertEquals(5, result);
+	}
+	
+	@Test
+	public void patternWithSeveralDelimiterShouldBeSupported() {
+		int result = stringCalculator.add("//[***][%]\n1*2%3");
+		Assert.assertEquals("[***][%]", stringCalculator.delimiter);
+	}
+	
+	@Test
+	public void severalDelimiterShouldBeReturnCorrectSum() {
+		int result = stringCalculator.add("//[***][%]\n1*2%3");
+		Assert.assertEquals(6, result);
+	}
 }
